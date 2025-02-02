@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Math\Tensor;
 
 use App\Math\RealNumber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
-final class Scalar extends Tensor
+#[CoversClass(Scalar::class)]
+final readonly class Scalar extends Tensor
 {
     public function __construct(
         private RealNumber $value,
     ) {
+        parent::__construct(TensorType::SCALAR);
     }
 
     public static function create(float|array $input): Scalar
@@ -36,5 +40,18 @@ final class Scalar extends Tensor
     public function size(): int
     {
         return 1;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'scalar' => $this->value->jsonSerialize()
+        ];
+    }
+
+    #[WhenNot('production')]
+    public static function random(): self
+    {
+        return new self(RealNumber::create(7.0));
     }
 }
