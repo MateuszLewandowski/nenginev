@@ -1,0 +1,111 @@
+services:
+  nenginev_mysql:
+    container_name: nenginev_mysql
+    image: mysql:8.0
+    restart: unless-stopped
+    platform: linux/amd64
+    labels:
+      - nenginev
+      - bs
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-root_password}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      APP_ENV: ${APP_ENV:-dev}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    networks:
+      - nenginev
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+  nenginev_redis:
+    container_name: nenginev_redis
+    image: redis:7-alpine
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - nenginev
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - redis_data:/data
+
+  nenginev_php:
+    container_name: nenginev_php
+    restart: unless-stopped
+    platform: linux/amd64
+    depends_on:
+      nenginev_mysql:
+        condition: service_healthy
+      nenginev_redis:
+        condition: service_healthy
+    build:
+      context: ../
+      dockerfile: .docker/php/Dockerfile
+      target: ${APP_ENV}
+      args:
+        TIMEZONE: ${TIMEZONE}
+    volumes:
+      - ../:/var/www/bs
+      - php_logs:/var/log/php
+    networks:
+      - nenginev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    init: true
+    environment:
+      TMPDIR: /tmp
+      PHP_IDE_CONFIG: "serverName=BusinessSupervisor"
+      XDEBUG_MODE: develop,debug
+    healthcheck:
+      test: ["CMD-SHELL", "[ \"$APP_ENV\" = \"production\" ] && php bin/console health:check || exit 0"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  nenginev_nginx:
+    container_name: nenginev_nginx
+    platform: linux/amd64
+    restart: unless-stopped
+    depends_on:
+      nenginev_php:
+        condition: service_healthy
+    build:
+      context: ../
+      dockerfile: .docker/nginx/Dockerfile
+    volumes:
+      - ../:/var/www/bs
+      - .docker/nginx/conf.d:/etc/nginx/conf.d
+      - nginx_logs:/var/log/nginx
+    ports:
+      - "${NGINX_PORT:-8080}:80"
+    networks:
+      - nenginev
+    env_file:
+      - .env.nginx.local
+
+volumes:
+  mysql_data:
+  redis_data:
+  php_logs:
+  nginx_logs:
+
+networks:
+  nenginev:
+    driver: bridge

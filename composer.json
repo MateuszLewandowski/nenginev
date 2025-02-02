@@ -4,17 +4,43 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/cache": "^2.2",
+        "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.3",
+        "guzzlehttp/guzzle": "^7.9",
+        "lexik/jwt-authentication-bundle": "*",
+        "psr/http-server-middleware": "^1.0",
+        "symfony/cache": "7.2.*",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/http-kernel": "7.2.*",
+        "symfony/process": "7.2.*",
+        "symfony/routing": "7.2.*",
         "symfony/runtime": "7.2.*",
-        "symfony/yaml": "7.2.*"
+        "symfony/security-bundle": "7.2.*",
+        "symfony/uid": "7.2.*",
+        "symfony/yaml": "7.2.*",
+        "symfonycasts/reset-password-bundle": "^1.23",
+      "ext-zend-opcache": "*"
     },
     "require-dev": {
+        "behat/behat": "^3.17",
+        "friends-of-behat/symfony-extension": "^2.6",
+        "friendsofphp/php-cs-fixer": "^3.65",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/php-code-coverage": "^11.0",
+        "phpunit/phpunit": "^11.5",
+        "rector/rector": "^2.0",
+        "roave/security-advisories": "dev-latest",
+        "symfony/maker-bundle": "^1.61",
+        "symfony/stopwatch": "7.2.*",
+        "symfony/web-profiler-bundle": "7.2.*"
     },
     "config": {
         "allow-plugins": {
@@ -63,7 +89,8 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.2.*"
+            "require": "7.2.*",
+            "docker": true
         }
     }
 }
