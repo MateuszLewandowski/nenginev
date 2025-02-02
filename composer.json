@@ -7,6 +7,7 @@
         "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-zend-opcache": "*",
         "doctrine/cache": "^2.2",
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
@@ -16,6 +17,7 @@
         "psr/http-server-middleware": "^1.0",
         "symfony/cache": "7.2.*",
         "symfony/console": "7.2.*",
+        "symfony/dependency-injection": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.2.*",
@@ -26,8 +28,7 @@
         "symfony/security-bundle": "7.2.*",
         "symfony/uid": "7.2.*",
         "symfony/yaml": "7.2.*",
-        "symfonycasts/reset-password-bundle": "^1.23",
-      "ext-zend-opcache": "*"
+        "symfonycasts/reset-password-bundle": "^1.23"
     },
     "require-dev": {
         "behat/behat": "^3.17",
@@ -54,7 +55,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "Core\\": "src/Core/"
+            "Core\\": "src/Core/",
+            "Math\\": "src/Math/"
         }
     },
     "autoload-dev": {
