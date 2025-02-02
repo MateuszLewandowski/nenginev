@@ -39,10 +39,12 @@ final class RealNumberTest extends TestCase
         $zero = RealNumber::zero();
         $one = RealNumber::one();
         $infinity = RealNumber::infinity();
+        $epsilon = RealNumber::epsilon();
 
         $this->assertSame(.0, $zero->value);
         $this->assertSame(1.0, $one->value);
         $this->assertSame(INF, $infinity->value);
+        $this->assertSame(1e-8, $epsilon->value);
     }
 
     public function testMutateRealNumber(): void

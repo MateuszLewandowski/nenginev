@@ -43,6 +43,11 @@ final readonly class RealNumber implements Stringable, JsonSerializable
         return new self(INF);
     }
 
+    public static function epsilon(): self
+    {
+        return new self(1e-8);
+    }
+
     public function negate(): self
     {
         return new self(-$this->value);
