@@ -48,6 +48,11 @@ final readonly class RealNumber implements Stringable, JsonSerializable
         return new self(1e-8);
     }
 
+    public static function base(): self
+    {
+        return new self(M_E);
+    }
+
     public function negate(): self
     {
         return new self(-$this->value);
