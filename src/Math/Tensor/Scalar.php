@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Math\Tensor;
 
 use App\Math\RealNumber;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
-#[CoversClass(Scalar::class)]
 final readonly class Scalar extends Tensor
 {
     public function __construct(
