@@ -6,13 +6,22 @@ namespace App\Math\Tensor;
 
 enum TensorType: string
 {
-    case ROW_VECTOR = 'row vector';
-    case COLUMN_VECTOR = 'column vector';
+    case VECTOR = 'vector';
     case MATRIX = 'matrix';
     case SCALAR = 'scalar';
 
     public function isScalar(): bool
     {
         return $this === self::SCALAR;
+    }
+
+    public function isVector(): bool
+    {
+        return $this === self::VECTOR;
+    }
+
+    public function isMatrix(): bool
+    {
+        return $this === self::MATRIX;
     }
 }
