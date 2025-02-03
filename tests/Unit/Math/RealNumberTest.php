@@ -46,7 +46,7 @@ final class RealNumberTest extends TestCase
         $this->assertSame(1.0, $one->value);
         $this->assertSame(INF, $infinity->value);
         $this->assertSame(1e-8, $epsilon->value);
-        $this->assertSame(M_E, $base->value);
+        $this->assertSame(round(M_E, 13), $base->value);
     }
 
     public function testMutateRealNumber(): void
@@ -135,5 +135,10 @@ final class RealNumberTest extends TestCase
         $this->assertSame([
             'value' => '1.5',
         ], RealNumber::create(1.5)->jsonSerialize());
+    }
+
+    public function testExtractNestedValue(): void
+    {
+        $this->assertSame(1.0, RealNumber::extract([[[[1.0]]]]));
     }
 }

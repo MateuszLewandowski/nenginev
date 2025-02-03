@@ -10,7 +10,7 @@ use Stringable;
 
 final readonly class RealNumber implements Stringable, JsonSerializable
 {
-    private const int PRECISION = 12;
+    private const int PRECISION = 13;
     public float $value;
 
     public function __construct(int|float|string $value)
@@ -122,5 +122,14 @@ final readonly class RealNumber implements Stringable, JsonSerializable
         return [
             'value' => $this->__toString(),
         ];
+    }
+
+    public static function extract(array|float $input): float
+    {
+        if (is_array($input)) {
+            return self::extract(current($input));
+        }
+
+        return (float) $input;
     }
 }
