@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
+use App\Math\Operation\Algebra;
 use App\Math\Values;
-use App\Model\Math\Value;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
 final readonly class Matrix extends Tensor
 {
+    use Algebra;
+
     public function __construct(
-        private Values $values,
+        Values $values,
     ) {
-        parent::__construct(TensorType::MATRIX);
+        parent::__construct($values, TensorType::MATRIX);
     }
 
     public static function create(float|array $input): Matrix

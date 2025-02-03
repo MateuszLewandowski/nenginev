@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
+use App\Math\Operation\Algebra;
 use App\Math\Values;
+use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
 final readonly class Vector extends Tensor
 {
+    use Algebra;
+
     public function __construct(
-        private Values $values,
+        Values $values,
     ) {
-        parent::__construct(TensorType::VECTOR);
+        parent::__construct($values, TensorType::VECTOR);
     }
 
     public static function create(float|array $input): Vector
@@ -53,5 +57,12 @@ final readonly class Vector extends Tensor
     public function primitive(): array
     {
         return $this->values->data();
+    }
+
+    #[WhenNot('production')]
+    /* @return Vector [1.0, 2.0] */
+    public static function random(): Vector
+    {
+        return self::create([1.0, 2.0]);
     }
 }

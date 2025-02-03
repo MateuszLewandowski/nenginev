@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
+use App\Math\Operation\Algebra;
 use App\Math\RealNumber;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
 final readonly class Scalar extends Tensor
 {
+    use Algebra;
+
     public function __construct(
-        private Values $values,
+        Values $values,
     ) {
-        parent::__construct(TensorType::SCALAR);
+        parent::__construct($values, TensorType::SCALAR);
     }
 
     public static function create(float|array $input): Scalar
@@ -44,9 +47,10 @@ final readonly class Scalar extends Tensor
     }
 
     #[WhenNot('production')]
+    /** @retrun Scalar 1.0 */
     public static function random(): self
     {
-        return new self(Values::create([RealNumber::create(7.0)->value]));
+        return new self(Values::create([RealNumber::create(1.0)->value]));
     }
 
     public function dimension(): int

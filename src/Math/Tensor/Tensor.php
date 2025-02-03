@@ -18,8 +18,8 @@ use JsonSerializable;
 use Symfony\Component\Uid\Uuid;
 
 abstract readonly class Tensor implements
-    JsonSerializable
-//    Algebraic,
+    JsonSerializable,
+    Algebraic
 //    Arithmetical,
 //    Clipable,
 //    Comparable,
@@ -30,6 +30,7 @@ abstract readonly class Tensor implements
     private Uuid $uid;
 
     protected function __construct(
+        protected Values $values,
         protected TensorType $type,
     ) {
         $this->uid = Uuid::v7();
