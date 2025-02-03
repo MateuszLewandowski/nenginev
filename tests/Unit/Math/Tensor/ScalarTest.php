@@ -17,7 +17,10 @@ final class ScalarTest extends TestCase
     #[DataProvider('scalarInputsProvider')]
     public function testCreateScalarWithDifferentValues(float $value): void
     {
-        $this->assertSame($value, Scalar::create($value)->primitive());
+        $scalar = Scalar::create($value);
+
+        $this->assertSame([$value], $scalar->values()->data());
+        $this->assertSame($value, $scalar->primitive());
     }
 
     public static function scalarInputsProvider(): Generator
@@ -36,14 +39,10 @@ final class ScalarTest extends TestCase
 
     public function testScalarSizeIsAlwaysOne(): void
     {
-        $this->assertSame(1, Scalar::random()->size());
-    }
-
-    public function testScalarReturnsPrimitiveValue(): void
-    {
         $scalar = Scalar::random();
 
-        $this->assertSame($scalar->value()->value, $scalar->primitive());
+        $this->assertSame(1, $scalar->size());
+        $this->assertSame(1, $scalar->dimension());
     }
 
     public function testScalarReturnsCorrectTensorType(): void
@@ -57,10 +56,6 @@ final class ScalarTest extends TestCase
     /** @example report of the work and results of the regression model */
     public function testScalarCanBeSerializedToJson(): void
     {
-        $this->assertSame([
-            'scalar' => [
-                'value' => '1.5',
-            ],
-        ], Scalar::create(1.5)->jsonSerialize());
+        $this->assertSame(['scalar' => 1.5], Scalar::create(1.5)->jsonSerialize());
     }
 }

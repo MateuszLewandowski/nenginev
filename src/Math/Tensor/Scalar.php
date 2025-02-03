@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace App\Math\Tensor;
 
 use App\Math\RealNumber;
+use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
 final readonly class Scalar extends Tensor
 {
     public function __construct(
-        private RealNumber $value,
+        private Values $values,
     ) {
         parent::__construct(TensorType::SCALAR);
     }
 
     public static function create(float|array $input): Scalar
     {
-        return new self(RealNumber::create($input));
+        return new self(Values::create(is_float($input) ? [$input] : $input));
     }
 
     public function isCompatible(Tensor $tensor): bool
@@ -25,14 +26,9 @@ final readonly class Scalar extends Tensor
         return true;
     }
 
-    public function value(): RealNumber
+    public function values(): Values
     {
-        return $this->value;
-    }
-
-    public function primitive(): float
-    {
-        return $this->value->value;
+        return $this->values;
     }
 
     public function size(): int
@@ -43,13 +39,23 @@ final readonly class Scalar extends Tensor
     public function jsonSerialize(): array
     {
         return [
-            'scalar' => $this->value->jsonSerialize()
+            'scalar' => current($this->values->data())
         ];
     }
 
     #[WhenNot('production')]
     public static function random(): self
     {
-        return new self(RealNumber::create(7.0));
+        return new self(Values::create([RealNumber::create(7.0)->value]));
+    }
+
+    public function dimension(): int
+    {
+        return 1;
+    }
+
+    public function primitive(): float
+    {
+        return current($this->values->data());
     }
 }
