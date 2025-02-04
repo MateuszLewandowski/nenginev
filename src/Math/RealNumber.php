@@ -10,7 +10,7 @@ use Stringable;
 
 final readonly class RealNumber implements Stringable, JsonSerializable
 {
-    private const int PRECISION = 13;
+    public const int PRECISION = 13;
     public float $value;
 
     public function __construct(int|float|string $value)

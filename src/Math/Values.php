@@ -102,7 +102,7 @@ final class Values implements JsonSerializable
     public function mutate(callable $fn, ...$args): void
     {
         array_walk_recursive($this->data, static function (float &$value) use ($fn, $args): void {
-            $value = $fn($value, ...$args);
+            $value = round($fn($value, ...$args), RealNumber::PRECISION);
         });
     }
 }

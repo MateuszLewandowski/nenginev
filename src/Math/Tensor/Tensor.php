@@ -11,9 +11,11 @@ use App\Math\Operation\Arithmetical;
 use App\Math\Operation\Clipable;
 use App\Math\Operation\Clipping;
 use App\Math\Operation\Comparable;
+use App\Math\Operation\Comparison;
 use App\Math\Operation\Compute;
 use App\Math\Operation\Reducible;
 use App\Math\Operation\Statistic;
+use App\Math\Operation\Trigonometric;
 use App\Math\Operation\Trigonometrical;
 use App\Math\Tensor\Exception\IncompatibleTensorException;
 use App\Math\Values;
@@ -23,7 +25,9 @@ use Symfony\Component\Uid\Uuid;
 abstract readonly class Tensor implements
     JsonSerializable,
     Algebraic,
-    Clipable
+    Clipable,
+    Comparable,
+    Trigonometrical
 //    Arithmetical,
 //    Clipable,
 //    Comparable,
@@ -31,7 +35,7 @@ abstract readonly class Tensor implements
 //    Statistic,
 //    Trigonometrical
 {
-    use Algebra, Arithmetic, Clipping;
+    use Algebra, Arithmetic, Clipping, Comparison, Trigonometric;
 
     private Uuid $uid;
 
