@@ -100,4 +100,19 @@ abstract readonly class Tensor implements
             $first->isScalar() && $second->isScalar() => /* @return Scalar */ Compute::scalars(/* @var Scalar $second */ $second, /* @var Scalar $first */ $first, $fn),
         };
     }
+
+    public function scalar(): Scalar
+    {
+        return /** @var Scalar $this */ $this;
+    }
+
+    public function vector(): Vector
+    {
+        return /** @var Vector $this */ $this;
+    }
+
+    public function matrix(): Matrix
+    {
+        return /** @var Matrix $this */ $this;
+    }
 }
