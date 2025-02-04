@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
+use App\Math\Operation\Matmul;
 use App\Math\Operation\Reducible;
 use App\Math\RealNumber;
+use App\Math\Tensor\Exception\IncompatibleTensorException;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
@@ -38,7 +40,8 @@ use Symfony\Component\DependencyInjection\Attribute\WhenNot;
  * @method Matrix atan()
  */
 final readonly class Matrix extends Tensor implements
-    Reducible
+    Reducible,
+    Matmul
 {
     public function __construct(
         Values $values,
@@ -144,5 +147,31 @@ final readonly class Matrix extends Tensor implements
     public function product(): Vector
     {
         return Vector::create(array_map(static fn (array $values) => array_product($values), $this->primitive()));
+    }
+
+    public function matmul(Matrix $matrix): Matmul
+    {
+        $firstMatrixRows = $this->rows();
+        $firstMatrixColumns = $this->columns();
+        $secondMatrixColumns = $matrix->columns();
+
+        if ($firstMatrixColumns !== $matrix->rows()) {
+            throw new IncompatibleTensorException($this, $matrix);
+        }
+
+        $first = $this->primitive();
+        $second = $matrix->primitive();
+
+        $result = array_fill(0, $firstMatrixRows, array_fill(0, $secondMatrixColumns, 0.0));
+
+        for ($i = 0; $i < $firstMatrixRows; ++$i) {
+            for ($j = 0; $j < $secondMatrixColumns; ++$j) {
+                for ($k = 0; $k < $firstMatrixColumns; ++$k) {
+                    $result[$i][$j] += $first[$i][$k] * $second[$k][$j];
+                }
+            }
+        }
+
+        return self::create($result);
     }
 }
