@@ -19,7 +19,7 @@ final readonly class Compute
         for ($i = 0, $rows = $first->rows(); $i < $rows; ++$i) {
             $result[$i] = [];
             for ($j = 0, $cols = $first->columns(); $j < $cols; ++$j) {
-                $result[$i][$j] = $fn($a[$i][$j], $b[$j][$i]);
+                $result[$i][$j] = $fn($a[$i][$j], $b[$i][$j]);
             }
         }
 

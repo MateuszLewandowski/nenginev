@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
-use App\Math\Operation\Algebra;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
 final readonly class Matrix extends Tensor
 {
-    use Algebra;
-
     public function __construct(
         Values $values,
     ) {
@@ -27,8 +24,7 @@ final readonly class Matrix extends Tensor
     {
         return match ($tensor->type()) {
             TensorType::SCALAR => true,
-            TensorType::VECTOR => $this->size() === $tensor->size(),
-            TensorType::MATRIX => $this->dimension() === $tensor->dimension(),
+            TensorType::VECTOR, TensorType::MATRIX => $this->dimension() === $tensor->dimension(),
         };
     }
 

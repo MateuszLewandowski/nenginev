@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
-use App\Math\Operation\Algebra;
 use App\Math\RealNumber;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
 final readonly class Scalar extends Tensor
 {
-    use Algebra;
-
     public function __construct(
         Values $values,
     ) {

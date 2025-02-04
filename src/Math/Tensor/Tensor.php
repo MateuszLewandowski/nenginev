@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Math\Tensor;
 
+use App\Math\Operation\Algebra;
 use App\Math\Operation\Algebraic;
+use App\Math\Operation\Arithmetic;
 use App\Math\Operation\Arithmetical;
 use App\Math\Operation\Clipable;
+use App\Math\Operation\Clipping;
 use App\Math\Operation\Comparable;
 use App\Math\Operation\Compute;
 use App\Math\Operation\Reducible;
@@ -19,7 +22,8 @@ use Symfony\Component\Uid\Uuid;
 
 abstract readonly class Tensor implements
     JsonSerializable,
-    Algebraic
+    Algebraic,
+    Clipable
 //    Arithmetical,
 //    Clipable,
 //    Comparable,
@@ -27,6 +31,8 @@ abstract readonly class Tensor implements
 //    Statistic,
 //    Trigonometrical
 {
+    use Algebra, Arithmetic, Clipping;
+
     private Uuid $uid;
 
     protected function __construct(
