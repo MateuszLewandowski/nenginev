@@ -56,4 +56,25 @@ final class MatrixTest extends TestCase
             false
         ];
     }
+
+    public function testTransposeMatrix(): void
+    {
+        $input = [
+            [1.0, 2.0],
+            [3.0, 4.0],
+            [5.0, 6.0],
+        ];
+        $expected = [
+            [1.0, 3.0, 5.0],
+            [2.0, 4.0, 6.0],
+        ];
+
+        $matrix = Matrix::create($input);
+        $transposed = $matrix->transpose();
+
+        $this->assertSame($matrix->columns(), $transposed->rows());
+        $this->assertSame($matrix->rows(), $transposed->columns());
+        $this->assertSame($expected, $transposed->primitive());
+        $this->assertSame($matrix->primitive(), $transposed->transpose()->primitive());
+    }
 }
