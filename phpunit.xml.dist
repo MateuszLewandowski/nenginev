@@ -6,7 +6,10 @@
          backupGlobals="false"
          colors="true"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
 >
     <php>
         <ini name="display_errors" value="1" />
@@ -22,16 +25,6 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
 
     <extensions>
     </extensions>
