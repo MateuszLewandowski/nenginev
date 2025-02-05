@@ -132,4 +132,9 @@ final readonly class RealNumber implements Stringable, JsonSerializable
 
         return (float) $input;
     }
+
+    public function asInteger(): int
+    {
+        return (int) $this->value;
+    }
 }

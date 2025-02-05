@@ -105,4 +105,14 @@ final class Values implements JsonSerializable
             $value = round($fn($value, ...$args), RealNumber::PRECISION);
         });
     }
+
+    public function length(): int
+    {
+        return $this->rows === 1 ? $this->columns : $this->rows;
+    }
+
+    public function empty(): bool
+    {
+        return empty($this->data);
+    }
 }
