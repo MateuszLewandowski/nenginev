@@ -22,6 +22,7 @@ final readonly class LabeledDataset extends Dataset
         return new self(Values::create($samples), Values::create($labels));
     }
 
+    /** @return float[] */
     public function classes(): array
     {
         return array_values(array_unique($this->labels->data(), SORT_REGULAR));
@@ -80,11 +81,17 @@ final readonly class LabeledDataset extends Dataset
     {
         $samples = $this->samples->data();
         $labels = $this->labels->data();
-        $order = range(0, $this->samples->length() - 1);
+        $order = range(0, count($samples) - 1);
         shuffle($order);
-        array_multisort($order, $samples, $labels);
 
-        return new self(Values::create($samples), Values::create($labels));
+        $shuffledSamples = [];
+        $shuffledLabels = [];
+        foreach ($order as $index) {
+            $shuffledSamples[] = $samples[$index];
+            $shuffledLabels[] = $labels[$index];
+        }
+
+        return new self(Values::create($shuffledSamples), Values::create($shuffledLabels));
     }
 
     public function labels(): Values

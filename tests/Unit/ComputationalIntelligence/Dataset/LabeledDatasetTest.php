@@ -109,6 +109,30 @@ final class LabeledDatasetTest extends TestCase
         $this->assertSame([7.0], $right->labels()->data());
     }
 
+    #[DataProvider('samplesAndLabelsDataProvider')]
+    public function testRandomizeDataset(array $samplesPayload, array $labelsPayload): void
+    {
+        $samples = Values::create($samplesPayload);
+        $labels = Values::create($labelsPayload);
+
+        $dataset = new LabeledDataset($samples, $labels);
+        $randomizedDataset = $dataset->randomize();
+
+        $this->assertCount(2, $randomizedDataset->samples()->data(), 'The number of samples should remain the same.');
+        $this->assertCount(2, $randomizedDataset->labels()->data(), 'The number of labels should remain the same.');
+
+        $originalSamples = $samples->data();
+        $originalLabels = $labels->data();
+        $randomizedSamples = $randomizedDataset->samples()->data();
+        $randomizedLabels = $randomizedDataset->labels()->data();
+
+        // Ensure that the samples and labels are still associated correctly
+        foreach ($randomizedSamples as $index => $sample) {
+            $originalIndex = array_search($sample, $originalSamples);
+            $this->assertSame($originalLabels[$originalIndex], $randomizedLabels[$index], 'The labels should remain associated with their samples.');
+        }
+    }
+
     public static function samplesAndLabelsDataProvider(): Generator
     {
         yield 'samples as values list and labels as its sum' => [
