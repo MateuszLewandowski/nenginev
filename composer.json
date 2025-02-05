@@ -56,7 +56,6 @@
         "psr-4": {
             "App\\": "src/",
             "Core\\": "src/Core/",
-            "Dataset\\": "src/Dataset/",
             "ComputationalIntelligence\\": "src/ComputationalIntelligence/",
             "Math\\": "src/Math/"
         }
