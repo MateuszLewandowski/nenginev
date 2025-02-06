@@ -6,10 +6,9 @@ namespace App\ComputationalIntelligence\Dataset\File\Decoder\Csv;
 
 use App\ComputationalIntelligence\Dataset\File\Decoder\ContentDecoderStrategy;
 use App\Math\RealNumber;
-use ArrayIterator;
 use SplFileObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Throwable;
+use App\ComputationalIntelligence\Dataset\TimeSeries;
 
 /** @property CsvFileContentDecoderArguments $arguments */
 final readonly class CsvContentDecoder extends ContentDecoderStrategy
@@ -27,49 +26,42 @@ final readonly class CsvContentDecoder extends ContentDecoderStrategy
             new CsvFileContentDecoderArguments(
                 separator: $arguments['separator'],
                 dateFormat: $arguments['dateFormat'],
-                valueFormat: $arguments['priceFormat'],
-                dateColumn: $arguments['dateColumn'],
-                valueColumn: $arguments['valueColumn'],
+                valueFormat: $arguments['valueFormat'],
                 containsHeader: filter_var($arguments['containsHeader'], FILTER_VALIDATE_BOOLEAN),
             )
         );
     }
 
-    public function decode(UploadedFile $file): ArrayIterator
+    public function decode(UploadedFile $file): TimeSeries
     {
         return $this->handleDecoding(
-            function () use ($file): ArrayIterator {
+            function () use ($file): TimeSeries {
+                $result = new TimeSeries();
+
                 $splFile = new SplFileObject($file->getRealPath());
                 $splFile->setFlags(self::RULES);
                 $splFile->setCsvControl($this->arguments->separator);
-
                 $headers = null;
 
-                $result = new ArrayIterator();
-
                 foreach ($splFile as $i => /** @var string[] $row */ $row) {
+
                     if ($this->isHeaderRow($i)) {
                         $headers = $row;
 
                         continue;
                     }
 
-                    if ($this->isInvalidRow($headers, $row)) {
+                    if ($headers === $row) {
                         continue;
                     }
 
-                    $key = $this->parseDateTime($row[$this->arguments->dateColumn]);
+                    $key = $this->parseDateTime($row[0]);
 
                     if (!$key) {
                         continue;
                     }
 
-                    try {
-                        $value = (float) sprintf($this->arguments->valueFormat, $row[$this->arguments->valueColumn]);
-                    } catch (Throwable) {
-                        continue;
-                    }
-
+                    $value = (float) sprintf($this->arguments->valueFormat, $row[1]);
                     $currentValue = $this->getCurrentValue($result, $key);
                     $result->offsetSet($key, round($currentValue + $value, RealNumber::PRECISION));
                 }
@@ -83,11 +75,5 @@ final readonly class CsvContentDecoder extends ContentDecoderStrategy
     {
         return $this->arguments->containsHeader
             && 0 === $index;
-    }
-
-    private function isInvalidRow(?array $headers, array $row): bool
-    {
-        return $headers === $row
-            || !isset($row[$this->arguments->dateColumn], $row[$this->arguments->valueColumn]);
     }
 }

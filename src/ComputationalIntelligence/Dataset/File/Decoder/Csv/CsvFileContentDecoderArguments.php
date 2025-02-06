@@ -12,8 +12,6 @@ final readonly class CsvFileContentDecoderArguments implements ContentDecoderArg
         public string $separator = ',',
         public string $dateFormat = 'Y-m-d H:i:s',
         public string $valueFormat = '%.2f',
-        public string $dateColumn = 'date',
-        public string $valueColumn = 'value',
         public bool $containsHeader = true,
     ) {
     }
@@ -21,5 +19,15 @@ final readonly class CsvFileContentDecoderArguments implements ContentDecoderArg
     public function intendedFor(): string
     {
         return CsvContentDecoder::class;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'separator' => $this->separator,
+            'dateFormat' => $this->dateFormat,
+            'valueFormat' => $this->valueFormat,
+            'containsHeader' => $this->containsHeader,
+        ];
     }
 }
