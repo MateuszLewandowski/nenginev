@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\ComputationalIntelligence\Dataset;
 
+use App\Math\Values;
 use ArrayIterator;
 
 final class TimeSeries extends ArrayIterator
@@ -29,5 +30,15 @@ final class TimeSeries extends ArrayIterator
     public function map(callable $callback): TimeSeries
     {
         return new self(array_map($callback, $this->getArrayCopy()));
+    }
+
+    public function values(): array
+    {
+        return array_values($this->getArrayCopy());
+    }
+
+    public function dates(): array
+    {
+        return array_keys($this->getArrayCopy());
     }
 }
