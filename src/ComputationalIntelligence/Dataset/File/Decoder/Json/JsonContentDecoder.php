@@ -6,8 +6,8 @@ namespace App\ComputationalIntelligence\Dataset\File\Decoder\Json;
 
 use App\ComputationalIntelligence\Dataset\File\Decoder\ContentDecoderStrategy;
 use App\Math\RealNumber;
-use ArrayIterator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\ComputationalIntelligence\Dataset\TimeSeries;
 
 /** @property JsonContentDecoderArguments $arguments */
 final readonly class JsonContentDecoder extends ContentDecoderStrategy
@@ -23,11 +23,11 @@ final readonly class JsonContentDecoder extends ContentDecoderStrategy
         );
     }
 
-    public function decode(UploadedFile $file): ArrayIterator
+    public function decode(UploadedFile $file): TimeSeries
     {
         return $this->handleDecoding(
-            function () use ($file): ArrayIterator {
-                $result = new ArrayIterator();
+            function () use ($file): TimeSeries {
+                $result = new TimeSeries();
                 $payload = json_decode($file->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
                 foreach ($payload as $key => $value) {

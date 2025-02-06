@@ -18,4 +18,12 @@ final readonly class JsonContentDecoderArguments implements ContentDecoderArgume
     {
         return JsonContentDecoder::class;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'dateFormat' => $this->dateFormat,
+            'valueFormat' => $this->valueFormat,
+        ];
+    }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Dataset\File\Decoder;
 
 use App\ComputationalIntelligence\Dataset\File\Decoder\Exception\ContentDecodingException;
-use ArrayIterator;
+use App\ComputationalIntelligence\Dataset\TimeSeries;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
@@ -19,9 +19,9 @@ abstract readonly class ContentDecoderStrategy
     ) {
     }
 
-    abstract public function decode(UploadedFile $file): ArrayIterator;
+    abstract public function decode(UploadedFile $file): TimeSeries;
 
-    protected function handleDecoding(callable $fn): ArrayIterator
+    protected function handleDecoding(callable $fn): TimeSeries
     {
         try {
             return $fn();
@@ -36,7 +36,7 @@ abstract readonly class ContentDecoderStrategy
             ->format(self::DATE_FORMAT);
     }
 
-    protected function getCurrentValue(ArrayIterator $result, string $key): float
+    protected function getCurrentValue(TimeSeries $result, string $key): float
     {
         return $result->offsetExists($key) ? $result->offsetGet($key) : .0;
     }
