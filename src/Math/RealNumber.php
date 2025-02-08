@@ -8,7 +8,7 @@ use App\Math\Exception\ArithmeticException;
 use JsonSerializable;
 use Stringable;
 
-final readonly class RealNumber implements Stringable, JsonSerializable
+readonly class RealNumber implements Stringable, JsonSerializable
 {
     public const int PRECISION = 13;
     public float $value;
