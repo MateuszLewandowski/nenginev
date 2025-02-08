@@ -39,12 +39,14 @@ final class ValuesTest extends TestCase
 
     public function testGetValueFromTheCell(): void
     {
-        $values = Values::create([
+        $valuesAsMatrix = Values::create([
             [1, 2, 3],
             [4, 5, 6],
         ]);
+        $valuesAsList = Values::create([1.0, 2.0]);
 
-        $this->assertSame(6.0, $values->cell(1, 2));
+        $this->assertSame(6.0, $valuesAsMatrix->cell(1, 2));
+        $this->assertSame(2.0, $valuesAsList->cell(1));
     }
 
     public function testConvertValuesToTheReportRepresentation(): void

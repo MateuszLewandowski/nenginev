@@ -43,13 +43,21 @@ final class Values implements JsonSerializable
         return new self(array_merge_recursive($this->data, $values->data));
     }
 
-    public function cell(int $i, int $j): float
+    public function cell(int $i, int $j = 0): float
     {
-        if (!isset($this->data[$i][$j])) {
+        if (is_array($this->data[$i])) {
+            if (!isset($this->data[$i][$j])) {
+                throw new UndefinedValueAddressException();
+            }
+
+            return $this->data[$i][$j];
+        }
+
+        if (!isset($this->data[$i])) {
             throw new UndefinedValueAddressException();
         }
 
-        return $this->data[$i][$j];
+        return $this->data[$i];
     }
 
     public function row(int $i): self
@@ -114,5 +122,10 @@ final class Values implements JsonSerializable
     public function empty(): bool
     {
         return empty($this->data);
+    }
+
+    public function hasTheSameLength(self $values): bool
+    {
+        return $this->length() === $values->length();
     }
 }
