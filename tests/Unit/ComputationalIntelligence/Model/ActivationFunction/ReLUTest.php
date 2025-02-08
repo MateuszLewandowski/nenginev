@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ReLU::class)]
 final class ReLUTest extends TestCase
 {
-    private ActivationFunction $relu;
+    private readonly ActivationFunction $relu;
 
     public function setUp(): void
     {

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Linear::class)]
 final class LinearTest extends TestCase
 {
-    private ActivationFunction $linear;
+    private readonly ActivationFunction $linear;
 
     public function setUp(): void
     {
