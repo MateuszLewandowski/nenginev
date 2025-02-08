@@ -8,12 +8,12 @@ use App\Math\Exception\MissingValuesException;
 use App\Math\Tensor\Exception\UndefinedValueAddressException;
 use JsonSerializable;
 
-final class Values implements JsonSerializable
+class Values implements JsonSerializable
 {
     private readonly int $rows;
     private readonly int $columns;
 
-    private function __construct(
+    protected function __construct(
         /** @var float[] */ private iterable $data,
     ) {
         if (is_countable(current($this->data))) {
@@ -25,7 +25,7 @@ final class Values implements JsonSerializable
         }
     }
 
-    public static function create(array $values): self
+    public static function create(array $values): static
     {
         if (empty($values)) {
             throw new MissingValuesException();
@@ -35,7 +35,7 @@ final class Values implements JsonSerializable
             $value = (float) $value;
         });
 
-        return new self($values);
+        return new static($values);
     }
 
     public function merge(self $values): self
@@ -128,4 +128,5 @@ final class Values implements JsonSerializable
     {
         return $this->length() === $values->length();
     }
+
 }
