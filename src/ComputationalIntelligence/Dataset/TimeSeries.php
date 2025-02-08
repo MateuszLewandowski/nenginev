@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\ComputationalIntelligence\Dataset;
 
-use App\Math\Values;
 use ArrayIterator;
 
 final class TimeSeries extends ArrayIterator
 {
-    public function __construct(array $array)
+    public function __construct(array $array = [])
     {
         parent::__construct($array);
     }
