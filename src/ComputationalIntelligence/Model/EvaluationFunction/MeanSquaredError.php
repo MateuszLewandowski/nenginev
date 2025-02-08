@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\ComputationalIntelligence\Model\CostFunction;
+namespace App\ComputationalIntelligence\Model\EvaluationFunction;
 
 use App\ComputationalIntelligence\Model\Exception\DifferentVectorsLengthException;
 use App\Math\RealNumber;
+use App\Math\Tensor\Matrix;
+use App\Math\Tensor\Scalar;
 use App\Math\Values;
 
-final readonly class MeanSquaredError implements CostFunction
+final readonly class MeanSquaredError implements CostFunction, LossFunction
 {
-
     public function evaluate(Values $predictions, Values $labels): RealNumber
     {
         if (!$predictions->hasTheSameLength($labels)) {
@@ -23,6 +24,19 @@ final readonly class MeanSquaredError implements CostFunction
         }
 
         return $error->divide(new RealNumber($labels->length()));
+    }
+
+    public function differential(Matrix $output, Scalar $target): Scalar
+    {
+        return $output->subtract($target)
+            ->square()
+            ->mean()
+            ->mean();
+    }
+
+    public function derivative(Matrix $output, Scalar $target): Matrix
+    {
+        return $output->subtract($target)->multiply(Scalar::create(2.0));
     }
 
     public function jsonSerialize(): array
