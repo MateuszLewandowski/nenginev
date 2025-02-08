@@ -137,4 +137,9 @@ readonly class RealNumber implements Stringable, JsonSerializable
     {
         return (int) $this->value;
     }
+
+    public function same(self $realNumber): bool
+    {
+        return $this->value === $realNumber->value;
+    }
 }
