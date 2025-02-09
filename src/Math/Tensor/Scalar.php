@@ -59,4 +59,14 @@ final readonly class Scalar extends Tensor
     {
         return current($this->values->data());
     }
+
+    public static function zeros(int ...$dimensions): Tensor
+    {
+        return self::create(.0);
+    }
+
+    public function shape(): array
+    {
+        return [1];
+    }
 }

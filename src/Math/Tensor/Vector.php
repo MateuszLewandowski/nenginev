@@ -98,4 +98,18 @@ final readonly class Vector extends Tensor implements
     {
         return Scalar::create(array_product($this->primitive()));
     }
+
+    public static function zeros(int ...$dimensions): Tensor
+    {
+        [$length] = $dimensions;
+
+        return self::create(array_fill(0, $length, .0));
+    }
+
+    public function shape(): array
+    {
+        return [
+            $this->size()
+        ];
+    }
 }

@@ -174,4 +174,24 @@ final readonly class Matrix extends Tensor implements
 
         return self::create($result);
     }
+
+    public static function zeros(int ...$dimensions): self
+    {
+        [$rows, $columns] = $dimensions;
+
+        return self::create(
+            array_fill(
+                0,
+                $rows,
+                array_fill(0, $columns, .0)
+            )
+        );
+    }
+
+    public function shape(): array
+    {
+        return [
+            $this->rows(), $this->columns()
+        ];
+    }
 }

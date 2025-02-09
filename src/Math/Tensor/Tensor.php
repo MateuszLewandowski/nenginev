@@ -52,6 +52,8 @@ abstract readonly class Tensor implements
     abstract public function values(): Values;
     abstract public function primitive(): mixed;
     abstract public function dimension(): int;
+    abstract public function shape(): array;
+    abstract public static function zeros(int ...$dimensions): self;
 
     public function id(): Uuid
     {
