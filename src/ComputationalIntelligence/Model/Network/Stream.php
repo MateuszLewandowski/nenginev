@@ -7,7 +7,7 @@ namespace App\ComputationalIntelligence\Model\Network;
 use App\ComputationalIntelligence\Model\Exception\DifferentFeaturesAndNeuronsQuantityException;
 use App\Math\Tensor\Matrix;
 
-final readonly class InputLayer implements Layer
+final readonly class Stream implements Layer, Touchable, FeedForwarding
 {
     public function __construct(
         public Neurons $neurons,

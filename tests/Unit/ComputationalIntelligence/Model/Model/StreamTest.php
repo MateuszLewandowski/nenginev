@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace App\Tests\Unit\ComputationalIntelligence\Model\Model;
 
 use App\ComputationalIntelligence\Model\Exception\DifferentFeaturesAndNeuronsQuantityException;
-use App\ComputationalIntelligence\Model\Network\InputLayer;
+use App\ComputationalIntelligence\Model\Network\Stream;
 use App\ComputationalIntelligence\Model\Network\Neurons;
 use App\Math\Tensor\Matrix;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(InputLayer::class)]
-final class InputLayerTest extends TestCase
+#[CoversClass(Stream::class)]
+final class StreamTest extends TestCase
 {
     #[DataProvider('neuronsProvider')]
     public function testCreateInputLayerWithSomeNeurons(Neurons $neurons): void
     {
-        $inputLayer = new InputLayer($neurons);
+        $inputLayer = new Stream($neurons);
 
         $this->assertSame($neurons->data(), $inputLayer->neurons->data());
         $this->assertSame([
-            'type' => InputLayer::class,
+            'type' => Stream::class,
             'args' => [
                 'neurons' => $neurons->data(),
             ],
@@ -32,7 +32,7 @@ final class InputLayerTest extends TestCase
     #[DataProvider('neuronsProvider')]
     public function testTouchLayerWhenUsingLearnedModel(Neurons $neurons): void
     {
-        $inputLayer = new InputLayer($neurons);
+        $inputLayer = new Stream($neurons);
         $matrix = Matrix::random();
         $output = $inputLayer->touch($matrix);
 
@@ -44,7 +44,7 @@ final class InputLayerTest extends TestCase
     {
         $this->expectException(DifferentFeaturesAndNeuronsQuantityException::class);
 
-        $inputLayer = new InputLayer($neurons);
+        $inputLayer = new Stream($neurons);
         $matrix = Matrix::create([
             [1.0, 2.0],
             [1.0, 2.0],
@@ -57,7 +57,7 @@ final class InputLayerTest extends TestCase
     #[DataProvider('neuronsProvider')]
     public function testFeedForwardInputDuringNetworkLearning(Neurons $neurons): void
     {
-        $inputLayer = new InputLayer($neurons);
+        $inputLayer = new Stream($neurons);
         $matrix = Matrix::create([
             [1.0, 2.0],
             [1.0, 2.0],
