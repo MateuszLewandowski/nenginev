@@ -16,9 +16,9 @@ final readonly class Scalar extends Tensor
         parent::__construct($values, TensorType::SCALAR);
     }
 
-    public static function create(float|array $input): Scalar
+    public static function create(int|float|array $input): Scalar
     {
-        return new self(Values::create(is_float($input) ? [$input] : $input));
+        return new self(Values::create(is_numeric($input) ? [$input] : $input));
     }
 
     public function isCompatible(Tensor $tensor): bool
