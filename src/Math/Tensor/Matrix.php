@@ -102,7 +102,7 @@ final readonly class Matrix extends Tensor implements
 
     #[WhenNot('production')]
     /* @return Matrix [[1.0, 2.0], [3.0, 4.0]] */
-    public static function random(): Matrix
+    public static function example(): Matrix
     {
         return self::create([[1.0, 2.0], [3.0, 4.0]]);
     }
@@ -149,7 +149,7 @@ final readonly class Matrix extends Tensor implements
         return Vector::create(array_map(static fn (array $values) => array_product($values), $this->primitive()));
     }
 
-    public function matmul(Matrix $matrix): Matmul
+    public function matmul(Matrix $matrix): Matrix
     {
         $firstMatrixRows = $this->rows();
         $firstMatrixColumns = $this->columns();
@@ -193,5 +193,27 @@ final readonly class Matrix extends Tensor implements
         return [
             $this->rows(), $this->columns()
         ];
+    }
+
+    public static function random(int $rows, int $columns): Matrix
+    {
+        return self::create(
+            array_map(
+                static fn (): array => array_map(
+                    static fn (): float => mt_rand() / mt_getrandmax(),
+                    range(0, $columns - 1)
+                ),
+                range(0, $rows - 1)
+            )
+        );
+    }
+
+    public function asVector(): Vector
+    {
+        if ($this->dimension() !== 1) {
+            //
+        }
+
+        return Vector::create(current($this->transpose()->primitive()));
     }
 }

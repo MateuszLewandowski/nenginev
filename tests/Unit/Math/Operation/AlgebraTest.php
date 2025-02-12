@@ -18,7 +18,7 @@ final class AlgebraTest extends TestCase
 
     public function setUp(): void
     {
-        $this->matrix = Matrix::random();
+        $this->matrix = Matrix::example();
         $this->vector = Vector::random();
         $this->scalar = Scalar::random();
     }

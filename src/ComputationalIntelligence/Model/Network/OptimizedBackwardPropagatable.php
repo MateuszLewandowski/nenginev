@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Model\Network;
 
 use App\ComputationalIntelligence\Model\Optimizer\Optimizer;
-use App\Math\Tensor\Scalar;
+use App\Math\RealNumber;
+use App\Math\Tensor\Matrix;
 
 interface OptimizedBackwardPropagatable
 {
-    public function backPropagation(Scalar $label, Optimizer $optimizer): Result;
+    public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $iteration): Gradient;
 }

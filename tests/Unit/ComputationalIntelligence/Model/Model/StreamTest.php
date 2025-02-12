@@ -33,7 +33,7 @@ final class StreamTest extends TestCase
     public function testTouchLayerWhenUsingLearnedModel(Neurons $neurons): void
     {
         $inputLayer = new Stream($neurons);
-        $matrix = Matrix::random();
+        $matrix = Matrix::example();
         $output = $inputLayer->touch($matrix);
 
         $this->assertSame($matrix, $output);

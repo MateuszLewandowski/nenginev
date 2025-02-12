@@ -35,7 +35,7 @@ final class AdamTest extends TestCase
             [0.0, 0.0],
         ];
 
-        $tensor = Matrix::random();
+        $tensor = Matrix::example();
         $this->adam->initialize($tensor);
 
         $id = $tensor->id();

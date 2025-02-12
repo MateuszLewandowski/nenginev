@@ -9,5 +9,5 @@ use App\Math\Tensor\Scalar;
 
 interface BackwardPropagatable
 {
-    public function backPropagation(Scalar $label): Result;
+    public function backPropagation(Scalar $label): Output;
 }

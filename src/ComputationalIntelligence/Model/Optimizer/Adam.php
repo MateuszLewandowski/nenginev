@@ -56,7 +56,6 @@ final class Adam implements Optimizer
         $velocityHat = $velocity->divide(Scalar::create(1.0)->subtract($this->momentum->pow($iteration)));
         $normHat = $norm->divide(Scalar::create(1.0)->subtract($this->decay->pow($iteration)));
 
-
         $this->memory->set($id, [$velocity, $norm]);
 
         # weights update
@@ -96,5 +95,14 @@ final class Adam implements Optimizer
     public function memory(): Memory
     {
         return $this->memory;
+    }
+
+    public static function default(): self
+    {
+        return new self(
+            learningRate: Scalar::create(1e-4),
+            momentum: Scalar::create(1e-1),
+            decay: Scalar::create(1e-3),
+        );
     }
 }

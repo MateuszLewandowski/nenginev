@@ -7,7 +7,7 @@ namespace App\ComputationalIntelligence\Model;
 use App\ComputationalIntelligence\Model\Exception\NegativeValueException;
 use App\Math\RealNumber;
 
-final readonly class Parameter extends RealNumber
+readonly class Parameter extends RealNumber
 {
     private const float MIN = .0;
 

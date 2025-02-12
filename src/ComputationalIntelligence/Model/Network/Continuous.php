@@ -20,9 +20,9 @@ final readonly class Continuous implements Layer, BackwardPropagatable, Trainabl
     }
 
 
-    public function backPropagation(Scalar $label): Result
+    public function backPropagation(Scalar $label): Output
     {
-        return new Result(
+        return new Output(
             gradient: $this->gradient($this->input, $label),
             loss: $this->lossFunction->differential($this->input, $label)
         );

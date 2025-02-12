@@ -18,4 +18,9 @@ class Neurons extends Values
 
         return parent::create($values);
     }
+
+    public static function single(): self
+    {
+        return self::create(([1e-4]));
+    }
 }

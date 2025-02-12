@@ -17,6 +17,7 @@ final class Memory
     public function get(Uuid $id): mixed
     {
         $address = $id->toRfc4122();
+
         if (!isset($this->memory[$address])) {
             throw new MissingMemoryAddressException($id);
         }

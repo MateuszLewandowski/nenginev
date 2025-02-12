@@ -42,7 +42,7 @@ final class MatrixTest extends TestCase
     #[DataProvider('matrixShapeProvider')]
     public function testMatrixHasTheSameShape(array $payload, bool $hasTheSameShape): void
     {
-        $this->assertSame($hasTheSameShape, Matrix::random()->sameShape(Matrix::create($payload)));
+        $this->assertSame($hasTheSameShape, Matrix::example()->sameShape(Matrix::create($payload)));
     }
 
     public static function matrixShapeProvider(): Generator

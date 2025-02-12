@@ -24,7 +24,7 @@ final class MemoryTest extends TestCase
     public function testSimpleMemory(): void
     {
         $id = Uuid::v4();
-        $this->memory->set($id, Matrix::random());
+        $this->memory->set($id, Matrix::example());
 
         $this->assertInstanceOf(Matrix::class, $this->memory->get($id));
     }
@@ -32,7 +32,7 @@ final class MemoryTest extends TestCase
     public function testRemoveFromMemory(): void
     {
         $id = Uuid::v4();
-        $this->memory->set($id, Matrix::random());
+        $this->memory->set($id, Matrix::example());
         $this->memory->remove($id);
 
         $this->expectException(MissingMemoryAddressException::class);
@@ -44,7 +44,7 @@ final class MemoryTest extends TestCase
         $id = Uuid::v4();
         $this->memory->push($id, Scalar::random());
         $this->memory->push($id, Vector::random());
-        $this->memory->push($id, Matrix::random());
+        $this->memory->push($id, Matrix::example());
 
         $this->assertInstanceOf(Scalar::class, $this->memory->first($id));
         $this->assertInstanceOf(Matrix::class, $this->memory->last($id));
