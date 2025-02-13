@@ -27,7 +27,7 @@ readonly class Linear extends ActivationFunction
     public function jsonSerialize(): array
     {
         return [
-            'type' => get_class($this),
+            'type' => self::class,
         ];
     }
 }

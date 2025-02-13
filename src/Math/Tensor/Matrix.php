@@ -8,6 +8,7 @@ use App\Math\Operation\Matmul;
 use App\Math\Operation\Reducible;
 use App\Math\RealNumber;
 use App\Math\Tensor\Exception\IncompatibleTensorException;
+use App\Math\Tensor\Exception\NonVectorableMatrixException;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
@@ -39,7 +40,7 @@ use Symfony\Component\DependencyInjection\Attribute\WhenNot;
  * @method Matrix tan()
  * @method Matrix atan()
  */
-final readonly class Matrix extends Tensor implements
+readonly class Matrix extends Tensor implements
     Reducible,
     Matmul
 {
@@ -211,9 +212,14 @@ final readonly class Matrix extends Tensor implements
     public function asVector(): Vector
     {
         if ($this->dimension() !== 1) {
-            //
+            throw new NonVectorableMatrixException();
         }
 
         return Vector::create(current($this->transpose()->primitive()));
+    }
+
+    public function pipe(callable $callback): self
+    {
+        return $callback($this);
     }
 }

@@ -8,5 +8,5 @@ use App\Math\Tensor\Matrix;
 
 interface GradientOrientedBackwardPropagatable
 {
-    public function backPropagation(Matrix $gradient): Gradient;
+    public function backPropagation(Matrix $gradient): Matrix;
 }

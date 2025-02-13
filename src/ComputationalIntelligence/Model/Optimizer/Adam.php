@@ -34,7 +34,7 @@ final class Adam implements Optimizer
         $this->memory->set($tensor->id(), [$base, clone $base]);
     }
 
-    public function optimize(Uuid $id, Tensor $gradient, RealNumber $iteration): Tensor
+    public function optimize(Uuid $id, Tensor $gradient, RealNumber $epoch): Tensor
     {
         /**
          * @var Tensor $velocity
@@ -53,8 +53,8 @@ final class Adam implements Optimizer
         );
 
         # bias correction
-        $velocityHat = $velocity->divide(Scalar::create(1.0)->subtract($this->momentum->pow($iteration)));
-        $normHat = $norm->divide(Scalar::create(1.0)->subtract($this->decay->pow($iteration)));
+        $velocityHat = $velocity->divide(Scalar::create(1.0)->subtract($this->momentum->pow($epoch)));
+        $normHat = $norm->divide(Scalar::create(1.0)->subtract($this->decay->pow($epoch)));
 
         $this->memory->set($id, [$velocity, $norm]);
 

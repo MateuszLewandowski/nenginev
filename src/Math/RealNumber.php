@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Math;
 
 use App\Math\Exception\ArithmeticException;
+use Countable;
 use JsonSerializable;
 use Stringable;
 
-readonly class RealNumber implements Stringable, JsonSerializable
+class RealNumber implements Stringable, JsonSerializable
 {
     public const int PRECISION = 13;
     public float $value;
@@ -141,5 +142,15 @@ readonly class RealNumber implements Stringable, JsonSerializable
     public function same(self $realNumber): bool
     {
         return $this->value === $realNumber->value;
+    }
+
+    public static function lengthOf(array|Countable $data): self
+    {
+        return new self(count($data));
+    }
+
+    public function increment(): self
+    {
+        return new self($this->value + 1.0);
     }
 }

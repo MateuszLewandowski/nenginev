@@ -11,5 +11,5 @@ use Symfony\Component\Uid\Uuid;
 interface Optimizer extends \JsonSerializable
 {
     public function initialize(Tensor $tensor): void;
-    public function optimize(Uuid $id, Tensor $gradient, RealNumber $iteration): Tensor;
+    public function optimize(Uuid $id, Tensor $gradient, RealNumber $epoch): Tensor;
 }

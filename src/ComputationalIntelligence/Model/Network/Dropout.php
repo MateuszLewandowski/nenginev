@@ -6,7 +6,7 @@ namespace App\ComputationalIntelligence\Model\Network;
 
 use App\Math\Tensor\Matrix;
 
-final readonly class Dropout implements FeedForwarding, GradientOrientedBackwardPropagatable, Layer
+final readonly class Dropout implements FeedForwarding, Layer
 {
     private Matrix $mask;
 
@@ -25,14 +25,7 @@ final readonly class Dropout implements FeedForwarding, GradientOrientedBackward
     }
 
 
-    public function backPropagation(Matrix $gradient): Gradient
-    {
-        return new Gradient(
-            value: $this->gradient($gradient),
-        );
-    }
-
-    private function gradient(Matrix $gradient): Matrix
+    public function backPropagation(Matrix $gradient): Matrix
     {
         return $gradient->multiply($this->mask);
     }

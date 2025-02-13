@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Model\Network;
 
 use App\ComputationalIntelligence\Model\Exception\NonPositiveNeuronsQuantityException;
+use App\Math\RealNumber;
 use App\Math\Values;
 
 class Neurons extends Values
@@ -22,5 +23,10 @@ class Neurons extends Values
     public static function single(): self
     {
         return self::create(([1e-4]));
+    }
+
+    public function quantity(): RealNumber
+    {
+        return new RealNumber($this->length());
     }
 }

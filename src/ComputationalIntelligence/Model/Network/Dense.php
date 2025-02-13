@@ -17,7 +17,6 @@ final class Dense implements
     Layer,
     FeedForwarding,
     OptimizedBackwardPropagatable,
-    Learnable,
     Touchable
 {
     private readonly Matrix $input;
@@ -25,7 +24,7 @@ final class Dense implements
     public Vector $bias;
 
     public function __construct(
-        private readonly Neurons $neurons,
+        public readonly Neurons $neurons,
         private readonly Parameter $alpha,
         private readonly Initializer $initializer,
     ) {
@@ -46,21 +45,21 @@ final class Dense implements
         return $this->touch($input);
     }
 
-    public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $iteration): Gradient
+    public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $epoch): Matrix
     {
         $weights = $this->weights;
         $weightsDerivative = $gradient->matmul($this->input->transpose())
             ->add($weights->multiply(Scalar::create($this->alpha->value)));
 
         $this->weights = $this->weights->subtract(
-            $optimizer->optimize($this->weights->id(), $weightsDerivative, $iteration)
+            $optimizer->optimize($this->weights->id(), $weightsDerivative, $epoch)
         );
 
         $this->bias = $this->bias->subtract(
-            $optimizer->optimize($this->bias->id(), $gradient->sum(), $iteration)
+            $optimizer->optimize($this->bias->id(), $gradient->sum(), $epoch)
         )->vector();
 
-        return new Gradient($this->gradient($weights, $gradient));
+        return $weights->transpose()->matmul($gradient);
     }
 
     public function touch(Matrix $input): Matrix
@@ -79,10 +78,5 @@ final class Dense implements
                 'initializer' => $this->initializer->jsonSerialize(),
             ],
         ];
-    }
-
-    public function gradient(Matrix $weights, Matrix $previousGradient): Tensor
-    {
-        return $weights->transpose()->matmul($previousGradient);
     }
 }

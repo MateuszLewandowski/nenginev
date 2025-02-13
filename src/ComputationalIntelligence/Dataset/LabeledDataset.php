@@ -108,4 +108,15 @@ final readonly class LabeledDataset extends Dataset
     {
         return false;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => self::class,
+            'args' => [
+                'samples' => $this->samples()->length(),
+                'labels' => $this->labels()->length(),
+            ],
+        ];
+    }
 }

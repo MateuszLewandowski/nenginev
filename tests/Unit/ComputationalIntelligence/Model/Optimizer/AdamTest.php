@@ -53,14 +53,14 @@ final class AdamTest extends TestCase
             [.1, -.2],
             [.15, .01],
         ]);
-        $iteration = RealNumber::create(1);
+        $epoch = RealNumber::create(1);
 
         $this->adam->initialize($gradient);
 
-        $output1 = $this->adam->optimize($gradient->id(), $gradient, $iteration);
+        $output1 = $this->adam->optimize($gradient->id(), $gradient, $epoch);
 
-        $iteration = RealNumber::create(2);
-        $output2 = $this->adam->optimize($gradient->id(), $gradient, $iteration);
+        $epoch = RealNumber::create(2);
+        $output2 = $this->adam->optimize($gradient->id(), $gradient, $epoch);
 
         $this->assertInstanceOf(Tensor::class, $output1);
         $this->assertInstanceOf(Tensor::class, $output2);

@@ -10,5 +10,5 @@ use App\Math\Tensor\Matrix;
 
 interface OptimizedBackwardPropagatable
 {
-    public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $iteration): Gradient;
+    public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $epoch): Matrix;
 }

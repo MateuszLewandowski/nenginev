@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Model\Network;
 
 use App\ComputationalIntelligence\Model\Exception\DifferentFeaturesAndNeuronsQuantityException;
+use App\Math\RealNumber;
 use App\Math\Tensor\Matrix;
 
-final readonly class Stream implements Layer, Touchable, FeedForwarding
+final readonly class Stream implements Layer, FeedForwarding
 {
     public function __construct(
         public Neurons $neurons,
     ) {
-    }
-
-    public function touch(Matrix $input): Matrix
-    {
-        return $input;
     }
 
     public function feedForward(Matrix $input): Matrix
@@ -36,5 +32,10 @@ final readonly class Stream implements Layer, Touchable, FeedForwarding
                 'neurons' => $this->neurons->data(),
             ],
         ];
+    }
+
+    public function neuronsQuantity(): RealNumber
+    {
+        return new RealNumber($this->neurons->length());
     }
 }

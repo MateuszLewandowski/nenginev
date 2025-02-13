@@ -7,7 +7,7 @@ namespace App\ComputationalIntelligence\Dataset;
 use App\Math\RealNumber;
 use App\Math\Values;
 
-abstract readonly class Dataset
+abstract readonly class Dataset implements \JsonSerializable
 {
     public function __construct(
         protected Values $samples
