@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Model\Network;
 
 use App\ComputationalIntelligence\Model\Exception\DropoutCoefficientOutOfRangeException;
-use App\ComputationalIntelligence\Model\Parameter;
+use App\ComputationalIntelligence\Parameter;
 use App\Math\Tensor\Scalar;
 
-final readonly class Coefficient extends Parameter
+final class Coefficient extends Parameter
 {
     private const float MIN = .0;
     private const float MAX = 1.0;

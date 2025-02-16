@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\ComputationalIntelligence;
 
 use App\ComputationalIntelligence\Model\Exception\NegativeValueException;
-use App\ComputationalIntelligence\Model\Parameter;
+use App\ComputationalIntelligence\Parameter;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

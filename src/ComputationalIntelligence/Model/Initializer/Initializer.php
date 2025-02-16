@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ComputationalIntelligence\Model\MatrixInitializer;
+namespace App\ComputationalIntelligence\Model\Initializer;
 
 use App\ComputationalIntelligence\Model\Network\Neurons;
 use App\Math\Tensor\Matrix;

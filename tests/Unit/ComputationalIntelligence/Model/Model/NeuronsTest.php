@@ -6,7 +6,7 @@ namespace App\Tests\Unit\ComputationalIntelligence\Model\Model;
 
 use App\ComputationalIntelligence\Model\Exception\NonPositiveNeuronsQuantityException;
 use App\ComputationalIntelligence\Model\Network\Neurons;
-use App\Math\Values;
+use App\Math\RealNumber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -15,28 +15,29 @@ use PHPUnit\Framework\TestCase;
 final class NeuronsTest extends TestCase
 {
     #[DataProvider('valuesProvider')]
-    public function testCreateNeuronsSet(array $input): void
+    public function testCreateNeuronsSet(int|string|float $input): void
     {
-        $this->assertSame($input, Neurons::create($input)->data());
+        $this->assertSame((float) $input, Neurons::create($input)->value);
     }
 
     public static function valuesProvider(): \Generator
     {
-        yield [
-            [1.0, 2.0],
-        ];
+        yield [17];
+        yield ['17'];
+        yield [17.0];
+
     }
 
     public function testTryToCreateNeuronsVectorWithNonPositiveQuantity(): void
     {
         $this->expectException(NonPositiveNeuronsQuantityException::class);
 
-        Neurons::create([]);
+        Neurons::create(0);
     }
 
     #[DataProvider('valuesProvider')]
-    public function testNeuronsAsValuesInstance(array $input): void
+    public function testNeuronsAsValuesInstance(int|string|float $input): void
     {
-        $this->assertInstanceOf(Values::class, Neurons::create($input));
+        $this->assertInstanceOf(RealNumber::class, Neurons::create($input));
     }
 }

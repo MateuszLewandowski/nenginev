@@ -13,7 +13,7 @@ final class IncompatibleTensorException extends InvalidArgumentException
     {
         parent::__construct(
             sprintf(
-                'Given tensor %s is not compatible with %s tensor',
+                'Given %s is not compatible with %s tensor',
                 $first->type()->value,
                 $second->type()->value,
             )

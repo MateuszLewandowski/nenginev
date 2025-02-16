@@ -6,12 +6,12 @@ namespace App\ComputationalIntelligence\Model\Network;
 
 use App\Math\Tensor\Matrix;
 
-final readonly class Dropout implements FeedForwarding, Layer
+final class Dropout implements FeedForwarding, Layer
 {
     private Matrix $mask;
 
     public function __construct(
-        private Coefficient $coefficient,
+        private readonly Coefficient $coefficient,
     ) {
     }
 

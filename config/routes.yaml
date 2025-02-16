@@ -1,0 +1,5 @@
+computational_intelligence:
+  resource:
+    path: ../src/ComputationalIntelligence/Application/Http/Controller
+    namespace: App\ComputationalIntelligence\Application\Http\Controller
+  type: attribute

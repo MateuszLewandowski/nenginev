@@ -7,14 +7,11 @@ namespace App\Math\Tensor;
 use App\Math\Operation\Algebra;
 use App\Math\Operation\Algebraic;
 use App\Math\Operation\Arithmetic;
-use App\Math\Operation\Arithmetical;
 use App\Math\Operation\Clipable;
 use App\Math\Operation\Clipping;
 use App\Math\Operation\Comparable;
 use App\Math\Operation\Comparison;
 use App\Math\Operation\Compute;
-use App\Math\Operation\Reducible;
-use App\Math\Operation\Statistic;
 use App\Math\Operation\Trigonometric;
 use App\Math\Operation\Trigonometrical;
 use App\Math\Tensor\Exception\IncompatibleTensorException;
@@ -22,7 +19,7 @@ use App\Math\Values;
 use JsonSerializable;
 use Symfony\Component\Uid\Uuid;
 
-abstract readonly class Tensor implements
+abstract class Tensor implements
     JsonSerializable,
     Algebraic,
     Clipable,
@@ -37,11 +34,11 @@ abstract readonly class Tensor implements
 {
     use Algebra, Arithmetic, Clipping, Comparison, Trigonometric;
 
-    private Uuid $uid;
+    private readonly Uuid $uid;
 
     protected function __construct(
         protected Values $values,
-        protected TensorType $type,
+        protected readonly TensorType $type,
     ) {
         $this->uid = Uuid::v7();
     }
@@ -116,5 +113,10 @@ abstract readonly class Tensor implements
     public function matrix(): Matrix
     {
         return /** @var Matrix $this */ $this;
+    }
+
+    public function pipe(callable $callback): static
+    {
+        return $callback($this);
     }
 }

@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Model\Regression;
 
 
-use App\ComputationalIntelligence\Model\Parameter;
+use App\ComputationalIntelligence\Parameter;
 
 final class Config
 {
     public function __construct(
-        public ?Parameter $batches,
-        public ?Parameter $batchSize,
-        public ?Parameter $alpha,
-        public ?Parameter $epochs,
-        public ?Parameter $minimumChange,
-        public ?Parameter $window,
-        public ?Parameter $holdOut,
+        public ?Parameter $batches = null,
+        public ?Parameter $batchSize = null,
+        public ?Parameter $alpha = null,
+        public ?Parameter $epochs = null,
+        public ?Parameter $minimumChange = null,
+        public ?Parameter $window = null,
+        public ?Parameter $holdOut = null,
     ) {
         $this->batches ??= $this->defaultBatches();
         $this->batchSize ??= $this->defaultBatchSize();

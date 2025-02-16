@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\ComputationalIntelligence\Model\Optimizer;
 
 use App\ComputationalIntelligence\Memory;
-use App\ComputationalIntelligence\Model\Parameter;
+use App\ComputationalIntelligence\Parameter;
 use App\Math\RealNumber;
 use App\Math\Tensor\Scalar;
 use App\Math\Tensor\Tensor;
@@ -17,9 +17,9 @@ final class Adam implements Optimizer
     private readonly Memory $memory;
 
     public function __construct(
-        private ?Scalar $learningRate,
-        private ?Scalar $momentum,
-        private ?Scalar $decay,
+        private ?Scalar $learningRate = null,
+        private ?Scalar $momentum = null,
+        private ?Scalar $decay = null,
     ) {
         $this->learningRate ??= Scalar::create($this->defaultLearningRate()->value);
         $this->momentum ??= Scalar::create($this->defaultMomentum()->value);

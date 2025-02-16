@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\ComputationalIntelligence\Model\Model;
 
-use App\ComputationalIntelligence\Model\MatrixInitializer\He;
+use App\ComputationalIntelligence\Model\Initializer\He;
 use App\ComputationalIntelligence\Model\Network\Dense;
 use App\ComputationalIntelligence\Model\Network\Gradient;
 use App\ComputationalIntelligence\Model\Network\Neurons;
 use App\ComputationalIntelligence\Model\Optimizer\Adam;
-use App\ComputationalIntelligence\Model\Parameter;
+use App\ComputationalIntelligence\Parameter;
 use App\Math\RealNumber;
 use App\Math\Tensor\Matrix;
 use App\Math\Tensor\Tensor;

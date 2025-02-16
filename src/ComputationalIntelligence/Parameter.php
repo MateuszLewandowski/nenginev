@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\ComputationalIntelligence\Model;
+namespace App\ComputationalIntelligence;
 
 use App\ComputationalIntelligence\Model\Exception\NegativeValueException;
 use App\Math\RealNumber;
 
-readonly class Parameter extends RealNumber
+class Parameter extends RealNumber
 {
     private const float MIN = .0;
 

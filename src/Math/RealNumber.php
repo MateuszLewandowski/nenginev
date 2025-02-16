@@ -19,9 +19,9 @@ class RealNumber implements Stringable, JsonSerializable
         $this->value = round((float) $value, self::PRECISION);
     }
 
-    public static function create(int|float|string $value): self
+    public static function create(int|float|string $value): static
     {
-        return new self($value);
+        return new static($value);
     }
 
     public function __toString(): string

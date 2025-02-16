@@ -8,7 +8,7 @@ use App\Math\Operation\Reducible;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
-final readonly class Vector extends Tensor implements
+final class Vector extends Tensor implements
     Reducible
 {
     public function __construct(
@@ -71,7 +71,9 @@ final readonly class Vector extends Tensor implements
             $value = is_array($value) ? $value[0] : [$value];
         });
 
-        return self::create($data);
+        $this->values = Values::create($data);
+
+        return $this;
     }
 
     public function min(): Scalar

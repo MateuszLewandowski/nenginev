@@ -24,9 +24,8 @@ cs-files:
 cs:
 	cd $(DOCKER) && docker compose exec -T nenginev_php sh -c "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix $(FILES)"
 
-
 unit:
-	cd $(DOCKER) && docker compose exec nenginev_php sh -c "vendor/bin/phpunit --coverage-text"
+	cd $(DOCKER) && docker compose exec nenginev_php sh -c "vendor/bin/phpunit"
 
 behat:
 	cd $(DOCKER) && docker compose exec nenginev_php sh -c "export APP_ENV='test'; vendor/bin/behat;"

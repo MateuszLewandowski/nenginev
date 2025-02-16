@@ -129,4 +129,8 @@ class Values implements JsonSerializable
         return $this->length() === $values->length();
     }
 
+    public function first(): float
+    {
+        return $this->data[0];
+    }
 }

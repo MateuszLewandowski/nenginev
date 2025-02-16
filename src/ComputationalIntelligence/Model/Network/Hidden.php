@@ -32,11 +32,11 @@ final readonly class Hidden implements
 
     public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $epoch): Matrix
     {
-        $gradient = $gradient
+        $calibrated = $gradient
             ->pipe(fn($g) => $this->dropout->backPropagation($g))
             ->pipe(fn($g) => $this->sense->backPropagation($g));
 
-        return $this->dense->backPropagation($optimizer, $gradient, $epoch);
+        return $this->dense->backPropagation($optimizer, $calibrated, $epoch);
     }
 
     public function feedForward(Matrix $input): Matrix

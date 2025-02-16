@@ -6,27 +6,32 @@ namespace App\ComputationalIntelligence\Model\Network;
 
 use App\ComputationalIntelligence\Model\Exception\NonPositiveNeuronsQuantityException;
 use App\Math\RealNumber;
-use App\Math\Values;
 
-class Neurons extends Values
+class Neurons extends RealNumber
 {
     #[\Override]
-    public static function create(array $values): static
+    public static function create(float|int|string $value): static
     {
-        if (count($values) < 1) {
+        $value = (int) $value;
+        if ($value < 1) {
             throw new NonPositiveNeuronsQuantityException();
         }
 
-        return parent::create($values);
+        return parent::create($value);
     }
 
     public static function single(): self
     {
-        return self::create(([1e-4]));
+        return self::create(1);
     }
 
-    public function quantity(): RealNumber
+    public function quantity(): int
     {
-        return new RealNumber($this->length());
+        return (int) $this->value;
+    }
+
+    public function hasLengthAs(int $length): bool
+    {
+        return $this->quantity() === $length;
     }
 }

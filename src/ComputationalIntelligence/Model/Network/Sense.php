@@ -7,7 +7,7 @@ namespace App\ComputationalIntelligence\Model\Network;
 use App\ComputationalIntelligence\Model\ActivationFunction\ActivationFunction;
 use App\Math\Tensor\Matrix;
 
-final readonly class Sense implements
+final class Sense implements
     Layer,
     FeedForwarding,
     Touchable,
@@ -17,7 +17,7 @@ final readonly class Sense implements
     private Matrix $output;
 
     public function __construct(
-        private ActivationFunction $activationFunction,
+        private readonly ActivationFunction $activationFunction,
     ) {
     }
 

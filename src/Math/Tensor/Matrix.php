@@ -8,6 +8,7 @@ use App\Math\Operation\Matmul;
 use App\Math\Operation\Reducible;
 use App\Math\RealNumber;
 use App\Math\Tensor\Exception\IncompatibleTensorException;
+use App\Math\Tensor\Exception\NonMatrixInputException;
 use App\Math\Tensor\Exception\NonVectorableMatrixException;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
@@ -40,7 +41,7 @@ use Symfony\Component\DependencyInjection\Attribute\WhenNot;
  * @method Matrix tan()
  * @method Matrix atan()
  */
-readonly class Matrix extends Tensor implements
+final class Matrix extends Tensor implements
     Reducible,
     Matmul
 {
@@ -52,7 +53,11 @@ readonly class Matrix extends Tensor implements
 
     public static function create(float|array $input): Matrix
     {
-        return new self(Values::create(is_float($input) ? [[$input]] : $input));
+        if (!is_array($input) || !is_array(current($input))) {
+            throw new NonMatrixInputException();
+        }
+
+        return new self(Values::create($input));
     }
 
     public function isCompatible(Tensor $tensor): bool
@@ -98,7 +103,7 @@ readonly class Matrix extends Tensor implements
 
     public function dimension(): int
     {
-        return $this->values->columns();
+        return $this->values->rows();
     }
 
     #[WhenNot('production')]
@@ -122,7 +127,9 @@ readonly class Matrix extends Tensor implements
             }
         }
 
-        return self::create($result);
+        $this->values = Values::create($result);
+
+        return $this;
     }
 
     public function min(): Vector
@@ -211,15 +218,6 @@ readonly class Matrix extends Tensor implements
 
     public function asVector(): Vector
     {
-        if ($this->dimension() !== 1) {
-            throw new NonVectorableMatrixException();
-        }
-
-        return Vector::create(current($this->transpose()->primitive()));
-    }
-
-    public function pipe(callable $callback): self
-    {
-        return $callback($this);
+        return Vector::create($this->values->column(0)->data());
     }
 }

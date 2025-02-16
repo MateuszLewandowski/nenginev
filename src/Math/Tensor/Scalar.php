@@ -8,7 +8,7 @@ use App\Math\RealNumber;
 use App\Math\Values;
 use Symfony\Component\DependencyInjection\Attribute\WhenNot;
 
-final readonly class Scalar extends Tensor
+final class Scalar extends Tensor
 {
     public function __construct(
         Values $values,

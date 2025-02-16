@@ -73,4 +73,9 @@ final readonly class UnlabeledDataset extends Dataset
     {
         return true;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [];
+    }
 }

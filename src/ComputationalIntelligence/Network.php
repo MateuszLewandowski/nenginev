@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ComputationalIntelligence\Model;
+namespace App\ComputationalIntelligence;
 
 use App\ComputationalIntelligence\Dataset\LabeledDataset;
 use App\ComputationalIntelligence\Model\Network\Continuous;
@@ -12,6 +12,7 @@ use App\ComputationalIntelligence\Model\Optimizer\Optimizer;
 use App\Math\RealNumber;
 use App\Math\Tensor\Matrix;
 use App\Math\Tensor\Scalar;
+use App\Math\Tensor\Vector;
 
 final readonly class Network
 {
@@ -31,16 +32,16 @@ final readonly class Network
     {
         $input = $this->stream->neurons;
         foreach ($this->hiddens as $hidden) {
-            $hidden->initialize($input, $this->optimizer);
+            $input = $hidden->initialize($input, $this->optimizer);
         }
     }
 
     public function cycle(LabeledDataset $dataset, RealNumber $epoch): RealNumber
     {
         $samples = $dataset->samples()->data();
-        $label = $dataset->labels()->column(0)->data();
+        $label = $dataset->labels()->first();
 
-        $this->feedForward(Matrix::create($samples));
+        $this->feedForward(Matrix::create($samples)->transpose());
 
         return RealNumber::create($this->backPropagation(Scalar::create($label), $epoch)->primitive());
     }
@@ -51,6 +52,7 @@ final readonly class Network
         foreach ($this->hiddens as $hidden) {
             $stream = $hidden->feedForward($stream);
         }
+        $this->continuous->feedForward($stream);
 
         return $stream;
     }
@@ -59,7 +61,7 @@ final readonly class Network
     {
         $output = $this->continuous->backPropagation($label);
         $gradient = $output->gradient;
-        foreach ($this->hiddens as $hidden) {
+        foreach (array_reverse($this->hiddens) as $hidden) {
             $gradient = $hidden->backPropagation($this->optimizer, $gradient, $epoch);
         }
 
@@ -72,7 +74,7 @@ final readonly class Network
             $input = $hidden->touch($input);
         }
 
-        return $input;
+        return $input->transpose();
     }
 
     public function jsonSerialize(): array

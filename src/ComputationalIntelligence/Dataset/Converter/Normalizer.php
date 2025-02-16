@@ -8,21 +8,19 @@ use App\ComputationalIntelligence\Dataset\TimeSeries;
 
 final readonly class Normalizer
 {
-    public function __construct(
-        private TimeSeries $timeSeries,
-    ) {
-    }
+    private array $extremes;
 
-    public function minMaxFeatureScaling(): TimeSeries
+    public function minMaxFeatureScaling(TimeSeries $timeSeries): TimeSeries
     {
-        [$min, $max] = $this->timeSeries->extremes();
+        $this->extremes = $timeSeries->extremes();
+        [$min, $max] = $this->extremes;
 
-        return $this->timeSeries->map(static fn (float $value): float => ($value - $min) / ($max - $min));
+        return $timeSeries->map(static fn (float $value): float => ($value - $min) / ($max - $min));
     }
 
     public function minMaxFeatureDescaling(TimeSeries $timeSeries): TimeSeries
     {
-        [$min, $max] = $this->timeSeries->extremes();
+        [$min, $max] = $this->extremes;
 
         return $timeSeries->map(static fn (float $value): float => round($value * ($max - $min) + $min, 2));
     }

@@ -8,7 +8,9 @@ use App\ComputationalIntelligence\Model\Exception\DifferentFeaturesAndNeuronsQua
 use App\Math\RealNumber;
 use App\Math\Tensor\Matrix;
 
-final readonly class Stream implements Layer, FeedForwarding
+final readonly class Stream implements
+    Layer,
+    FeedForwarding
 {
     public function __construct(
         public Neurons $neurons,
@@ -17,7 +19,7 @@ final readonly class Stream implements Layer, FeedForwarding
 
     public function feedForward(Matrix $input): Matrix
     {
-        if ($input->rows() !== $this->neurons->length()) {
+        if (!$this->neurons->hasLengthAs($input->rows())) {
             throw new DifferentFeaturesAndNeuronsQuantityException();
         }
 
@@ -29,13 +31,13 @@ final readonly class Stream implements Layer, FeedForwarding
         return [
             'type' => get_class($this),
             'args' => [
-                'neurons' => $this->neurons->data(),
+                'neurons' => $this->neurons->value,
             ],
         ];
     }
 
     public function neuronsQuantity(): RealNumber
     {
-        return new RealNumber($this->neurons->length());
+        return new RealNumber($this->neurons->value);
     }
 }

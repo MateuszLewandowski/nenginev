@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\ComputationalIntelligence\Model\Network;
 
-use App\ComputationalIntelligence\Model\MatrixInitializer\Initializer;
+use App\ComputationalIntelligence\Model\Initializer\Initializer;
 use App\ComputationalIntelligence\Model\Optimizer\Optimizer;
-use App\ComputationalIntelligence\Model\Parameter;
+use App\ComputationalIntelligence\Parameter;
 use App\Math\RealNumber;
 use App\Math\Tensor\Matrix;
 use App\Math\Tensor\Scalar;
-use App\Math\Tensor\Tensor;
 use App\Math\Tensor\Vector;
+use Symfony\Component\Uid\Uuid;
 
 final class Dense implements
     Layer,
@@ -19,7 +19,9 @@ final class Dense implements
     OptimizedBackwardPropagatable,
     Touchable
 {
-    private readonly Matrix $input;
+    private Uuid $weightsId;
+    private Uuid $biasId;
+    private Matrix $input;
     public Matrix $weights;
     public Vector $bias;
 
@@ -33,7 +35,9 @@ final class Dense implements
     public function initialize(Neurons $neurons): Neurons
     {
         $this->weights = $this->initializer->initialize($this->neurons, $neurons);
+        $this->weightsId = $this->weights->id();
         $this->bias = $this->initializer->initialize($this->neurons, Neurons::single())->asVector();
+        $this->biasId = $this->bias->id();
 
         return $this->neurons;
     }
@@ -48,15 +52,16 @@ final class Dense implements
     public function backPropagation(Optimizer $optimizer, Matrix $gradient, RealNumber $epoch): Matrix
     {
         $weights = $this->weights;
-        $weightsDerivative = $gradient->matmul($this->input->transpose())
-            ->add($weights->multiply(Scalar::create($this->alpha->value)));
+        $gradient = $gradient->matmul($this->input->transpose());
+
+        $weightsDerivative = $gradient->add($weights->multiply(Scalar::create($this->alpha->value)));
 
         $this->weights = $this->weights->subtract(
-            $optimizer->optimize($this->weights->id(), $weightsDerivative, $epoch)
+            $optimizer->optimize($this->weightsId, $weightsDerivative, $epoch)
         );
 
         $this->bias = $this->bias->subtract(
-            $optimizer->optimize($this->bias->id(), $gradient->sum(), $epoch)
+            $optimizer->optimize($this->biasId, $gradient->sum(), $epoch)
         )->vector();
 
         return $weights->transpose()->matmul($gradient);
@@ -73,7 +78,7 @@ final class Dense implements
         return [
             'type' => self::class,
             'args' => [
-                'neurons' => $this->neurons->length(),
+                'neurons' => $this->neurons->value,
                 'alpha' => $this->alpha->value,
                 'initializer' => $this->initializer->jsonSerialize(),
             ],

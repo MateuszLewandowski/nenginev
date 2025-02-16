@@ -6,7 +6,7 @@ namespace App\ComputationalIntelligence\Model\Regression;
 
 use App\ComputationalIntelligence\Dataset\LabeledDataset;
 use App\ComputationalIntelligence\Model\EvaluationFunction\CostFunction;
-use App\ComputationalIntelligence\Model\Network;
+use App\ComputationalIntelligence\Network;
 use App\Math\RealNumber;
 use App\Math\Tensor\Matrix;
 use App\Math\Values;
@@ -89,7 +89,7 @@ final class MultiPerceptron implements RegressionModel
     public function predict(LabeledDataset $features): Values
     {
         return $this->network->touch(
-            Matrix::create($features->samples()->data())
+            Matrix::create($features->samples()->data())->transpose()
         )->values()->column(0);
     }
 
