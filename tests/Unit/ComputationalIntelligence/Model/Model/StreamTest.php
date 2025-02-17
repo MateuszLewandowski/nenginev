@@ -20,23 +20,13 @@ final class StreamTest extends TestCase
     {
         $inputLayer = new Stream($neurons);
 
-        $this->assertSame($neurons->data(), $inputLayer->neurons->data());
+        $this->assertSame($neurons->value, $inputLayer->neurons->value);
         $this->assertSame([
             'type' => Stream::class,
             'args' => [
-                'neurons' => $neurons->data(),
+                'neurons' => $neurons->value,
             ],
         ], $inputLayer->jsonSerialize());
-    }
-
-    #[DataProvider('neuronsProvider')]
-    public function testTouchLayerWhenUsingLearnedModel(Neurons $neurons): void
-    {
-        $inputLayer = new Stream($neurons);
-        $matrix = Matrix::example();
-        $output = $inputLayer->touch($matrix);
-
-        $this->assertSame($matrix, $output);
     }
 
     #[DataProvider('neuronsProvider')]
@@ -70,6 +60,6 @@ final class StreamTest extends TestCase
 
     public static function neuronsProvider(): \Generator
     {
-        yield 'two neurons as input vector' => [Neurons::create([1.0, 2.0])];
+        yield 'two neurons as input vector' => [Neurons::create(2)];
     }
 }

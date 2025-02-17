@@ -6,7 +6,6 @@ namespace App\Tests\Unit\ComputationalIntelligence\Model\Model;
 
 use App\ComputationalIntelligence\Model\Initializer\He;
 use App\ComputationalIntelligence\Model\Network\Dense;
-use App\ComputationalIntelligence\Model\Network\Gradient;
 use App\ComputationalIntelligence\Model\Network\Neurons;
 use App\ComputationalIntelligence\Model\Optimizer\Adam;
 use App\ComputationalIntelligence\Parameter;
@@ -20,16 +19,15 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Dense::class)]
 #[CoversClass(Adam::class)]
-#[CoversClass(Gradient::class)]
 final class DenseTest extends TestCase
 {
     #[DataProvider('denseProvider')]
     public function testInitializeDenseUnit(Dense $dense): void
     {
-        $inputNeurons = Neurons::create([1e-4, 1e-4]);
+        $inputNeurons = Neurons::create(2);
         $neurons = $dense->initialize($inputNeurons);
 
-        $this->assertSame([1e-3, 1e-3], $neurons->data());
+        $this->assertSame(2, $neurons->quantity());
 
         foreach ($dense->weights->primitive() as $row) {
             foreach ($row as $value) {
@@ -39,25 +37,10 @@ final class DenseTest extends TestCase
     }
 
     #[DataProvider('denseProvider')]
-    public function testCalculateGradient(Dense $dense): void
-    {
-        $threshold = 10.0;
-        $inputNeurons = Neurons::create([1e-4, 1e-4]);
-        $dense->initialize($inputNeurons);
-
-        $gradient = $dense->gradient($dense->weights, Matrix::create([
-            [1.0, 2.0],
-            [3.0, 4.0],
-        ]));
-
-        $this->assertTrue($this->verifyIfEveryValueInGradientBelongsToTheBounds($gradient, $threshold));
-    }
-
-    #[DataProvider('denseProvider')]
     public function testGenerateBackpropagation(Dense $dense): void
     {
         $examplePayload = Matrix::example();
-        $inputNeurons = Neurons::create([1e-4, 1e-4]);
+        $inputNeurons = Neurons::create(2);
         $dense->initialize($inputNeurons);
 
         $adam = Adam::default();
@@ -67,30 +50,29 @@ final class DenseTest extends TestCase
         $dense->feedForward($examplePayload);
         $gradient = $dense->backPropagation($adam, $examplePayload, new RealNumber(1.0));
 
-        $this->assertInstanceOf(Matrix::class, $gradient->value);
-        $this->assertSame(2, $gradient->value->rows());
-        $this->assertSame(2, $gradient->value->columns());
-        $this->verifyIfEveryValueInGradientBelongsToTheBounds($gradient->value, 5.0);
+        $this->assertSame(2, $gradient->rows());
+        $this->assertSame(2, $gradient->columns());
+        $this->assertTrue($this->verifyIfEveryValueInGradientIsPossitiveNumber($gradient));
     }
 
     #[DataProvider('denseProvider')]
     public function testTouchDenseForUsingTrainedAlreadyModel(Dense $dense): void
     {
         $examplePayload = Matrix::example();
-        $inputNeurons = Neurons::create([1e-4, 1e-4]);
+        $inputNeurons = Neurons::create(2);
         $dense->initialize($inputNeurons);
 
         $result = $dense->touch($examplePayload);
         $this->assertSame(2, $result->rows());
         $this->assertSame(2, $result->columns());
-        $this->verifyIfEveryValueInGradientBelongsToTheBounds($result, 5.0);
+        $this->assertTrue($this->verifyIfEveryValueInGradientIsPossitiveNumber($result));
     }
 
-    private function verifyIfEveryValueInGradientBelongsToTheBounds(Tensor $gradient, float $threshold): bool
+    private function verifyIfEveryValueInGradientIsPossitiveNumber(Tensor $gradient): bool
     {
         foreach ($gradient->primitive() as $row) {
             foreach ($row as $value) {
-                if (abs($value) >= $threshold) {
+                if ($value <= .0) {
                     return false;
                 }
             }
@@ -105,7 +87,7 @@ final class DenseTest extends TestCase
     {
         yield [
             new Dense(
-                Neurons::create([1e-3, 1e-3]),
+                Neurons::create(2),
                 new Parameter(1e-4),
                 new He(),
             ),

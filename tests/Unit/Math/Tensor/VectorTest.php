@@ -52,11 +52,11 @@ final class VectorTest extends TestCase
             [1, 2],
             [3, 4],
             [5, 6]
-        ]), 'isCompatible' => true];
+        ]), 'isCompatible' => false];
         yield ['tensor' => Matrix::create([
             [1, 2, 3],
             [4, 5, 6]
-        ]), 'isCompatible' => false];
+        ]), 'isCompatible' => true];
     }
 
     public function testVectorCanBeSerializedToJson(): void

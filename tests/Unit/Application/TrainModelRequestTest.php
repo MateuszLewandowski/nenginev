@@ -35,35 +35,42 @@ final class TrainModelRequestTest extends TestCase
     public static function httpRequestPayloadProvider(): Generator
     {
         $payload = [
-            'config.batches' => 100,
-            'config.batchSize' => 7,
-            'config.alpha' => 1e-4,
-            'config.epochs' => 1000,
-            'config.minimumChange' => 1e-3,
-            'config.window' => 5,
-            'config.holdOut' => .2,
-
-            'stream.length' => 14,
-
-            'continuous.lossFunction' => 'meanSquaredError',
-
+            'config' => [
+                'batches' => 100,
+                'batchSize' => 7,
+                'alpha' => 1e-4,
+                'epochs' => 1000,
+                'minimumChange' => 1e-3,
+                'window' => 5,
+                'holdOut' => .2,
+            ],
+            'stream' => [
+                'length' => 14,
+            ],
+            'continuous' => [
+                'lossFunction' => 'meanSquaredError',
+            ],
             'optimizer' => 'adam',
-
             'hiddens' => [
                 [
-                    'dense.neurons' => 32,
-                    'dense.alpha' => 1e-4,
-                    'dense.initializer' => 'he',
-                    'sense.activationFunction' => 'relu',
-                    'dropout.coefficient' => .2,
+                    'dense' => [
+                        'neurons' => 32,
+                        'alpha' => 1e-4,
+                        'initializer' => 'he',
+                    ],
+                    'sense' => [
+                        'activationFunction' => 'relu',
+                    ],
+                    'dropout' => [
+                        'coefficient' => .2,
+                    ],
                 ]
             ],
-
             'costFunction' => 'meanSquaredError',
         ];
 
         yield [
-            'request' => Request::create('/', Request::METHOD_POST, $payload),
+            'request' => Request::create('/', Request::METHOD_POST, server: ['CONTENT_TYPE' => 'application/json',], content: json_encode($payload)),
             'expected' => [
                 'type' => TrainModelRequest::class,
                 'args' => [

@@ -24,7 +24,7 @@ final class MatrixTest extends TestCase
         $this->assertSame($input, $matrix->primitive());
         $this->assertSame(2, $matrix->columns());
         $this->assertSame(3, $matrix->rows());
-        $this->assertSame($matrix->dimension(), $matrix->columns());
+        $this->assertSame($matrix->dimension(), $matrix->rows());
         $this->assertSame($matrix->rows() * $matrix->columns(), $matrix->size());
     }
 

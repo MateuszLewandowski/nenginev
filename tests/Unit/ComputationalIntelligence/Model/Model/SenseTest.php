@@ -21,7 +21,7 @@ final class SenseTest extends TestCase
         $output = $sense->feedForward($input);
 
         # ReLU has linear activation function
-        $this->assertSame($expected, $output);
+        $this->assertSame($expected, $output->primitive());
     }
 
     public static function senseForLinearActivationFunctionComputingProvider(): Generator
@@ -44,7 +44,7 @@ final class SenseTest extends TestCase
         $sense->feedForward($input);
         $gradient = $sense->backPropagation($input);
 
-        $this->assertSame($expected, $gradient->value->primitive());
+        $this->assertSame($expected, $gradient->primitive());
     }
 
     public static function senseForReluActivationFunctionDerivativeProvider(): Generator

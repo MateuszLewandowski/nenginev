@@ -127,9 +127,8 @@ final class Matrix extends Tensor implements
             }
         }
 
-        $this->values = Values::create($result);
-
-        return $this;
+        # here
+        return new self(Values::create($result));
     }
 
     public function min(): Vector

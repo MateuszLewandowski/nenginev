@@ -18,13 +18,7 @@ final class NormalizerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->normalizer = new Normalizer(
-            new TimeSeries([
-                '2024-01-01 12:00' => 100.0,
-                '2024-01-01 12:01' => 200.0,
-                '2024-01-01 12:31' => 500.0,
-            ])
-        );
+        $this->normalizer = new Normalizer();
     }
 
     #[DataProvider('timeSeriesScalingProvider')]
@@ -32,7 +26,13 @@ final class NormalizerTest extends TestCase
     {
         [$expectedValues, $expectedNormalizedValues] = [array_column($expected, 0), array_column($expected, 1)];
 
-        $normalizedValues = $this->normalizer->minMaxFeatureScaling();
+        $normalizedValues = $this->normalizer->minMaxFeatureScaling(
+            new TimeSeries([
+                '2024-01-01 12:00' => 100.0,
+                '2024-01-01 12:01' => 200.0,
+                '2024-01-01 12:31' => 500.0,
+            ])
+        );
         $values = $this->normalizer->minMaxFeatureDescaling($normalizedValues);
 
         $this->assertSame($expectedNormalizedValues, array_values($normalizedValues->getArrayCopy()));
