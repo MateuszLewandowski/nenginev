@@ -64,6 +64,6 @@ final readonly class TrainingProcessor
         $score = $multiPerceptron->train();
         $test = $multiPerceptron->test();
 
-        dd($score, $test);
+        dd($score, $test, $multiPerceptron->report());
     }
 }

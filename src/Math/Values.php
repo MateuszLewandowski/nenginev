@@ -13,7 +13,7 @@ class Values implements JsonSerializable
     private readonly int $rows;
     private readonly int $columns;
 
-    protected function __construct(
+    public function __construct(
         /** @var float[] */ private iterable $data,
     ) {
         if (is_countable(current($this->data))) {
