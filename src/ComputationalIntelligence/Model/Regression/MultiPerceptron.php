@@ -6,7 +6,6 @@ namespace App\ComputationalIntelligence\Model\Regression;
 
 use App\ComputationalIntelligence\Dataset\LabeledDataset;
 use App\ComputationalIntelligence\Measurement\Timer;
-use App\ComputationalIntelligence\Measurement\TimeUnit;
 use App\ComputationalIntelligence\Memory;
 use App\ComputationalIntelligence\Model\EvaluationFunction\CostFunction;
 use App\ComputationalIntelligence\Model\Tracking\Snapshot;
@@ -159,7 +158,7 @@ final class MultiPerceptron implements RegressionModel
     {
         return [
             'time' => $this->timer->measurement(),
-            'epochs' => $this->memory->get($this->id),
+            'epochs' => $this->memory->last($this->id),
         ];
     }
 }
