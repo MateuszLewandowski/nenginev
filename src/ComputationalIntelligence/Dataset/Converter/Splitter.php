@@ -22,16 +22,16 @@ final readonly class Splitter
         $size = $batchSize->asInteger();
         $values = $timeSeries->values();
 
-        $requiredLength = $length * $size + $length - 1;
+        $requiredLength = $length + $size;
         if ($timeSeries->count() < $requiredLength) {
             throw new TimeSeriesLengthException();
         }
 
         for ($i = 0; $i < $length; ++$i) {
             for ($j = 0; $j < $size; ++$j) {
-                $samples[$i][$j] = $values[$i * $size + $j];
+                $samples[$i][$j] = $values[$i + $j];
             }
-            $labels[$i] = $values[$i * $size + $size];
+            $labels[$i] = $values[$i + $size];
         }
 
         return [
