@@ -6,10 +6,9 @@ namespace App\ComputationalIntelligence\Model\Regression;
 
 use App\ComputationalIntelligence\Dataset\Converter\Normalizer;
 use App\ComputationalIntelligence\Dataset\Converter\Splitter;
+use App\ComputationalIntelligence\Dataset\File\Decoder\Csv\CsvContentDecoder;
+use App\ComputationalIntelligence\Dataset\File\Decoder\Csv\CsvFileContentDecoderArguments;
 use App\ComputationalIntelligence\Dataset\File\Decoder\FileContentDecoder;
-use App\ComputationalIntelligence\Dataset\File\Decoder\Json\JsonContentDecoder;
-use App\ComputationalIntelligence\Dataset\File\Decoder\Json\JsonContentDecoderArguments;
-use App\ComputationalIntelligence\Dataset\Generator\RandomTimeSeriesGenerator;
 use App\ComputationalIntelligence\Dataset\LabeledDataset;
 use App\ComputationalIntelligence\Model\Application\TrainModelRequest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,26 +19,23 @@ final readonly class TrainingProcessor
     private FileContentDecoder $fileContentDecoder;
     private Normalizer $normalizer;
     private Splitter $splitter;
-    private RandomTimeSeriesGenerator $randomTimeSeriesGenerator;
 
     public function __construct(
     ) {
         $this->fileContentDecoder = new FileContentDecoder(
-            new JsonContentDecoder(
-                (new JsonContentDecoderArguments())->jsonSerialize()
+            new CsvContentDecoder(
+                (new CsvFileContentDecoderArguments())->jsonSerialize()
             )
         );
         $this->splitter = new Splitter();
         $this->normalizer = new Normalizer();
-        $this->randomTimeSeriesGenerator = new RandomTimeSeriesGenerator();
     }
 
     public function __invoke(Request $request): void
     {
         $trainModelRequest = TrainModelRequest::fromHttpRequest($request);
 
-        $fileName = $this->randomTimeSeriesGenerator->generate(200);
-        $uploadedFile = new UploadedFile($fileName, 'test.json', 'application/csv', null, true);
+        $uploadedFile = new UploadedFile('super_shop_dataset.csv', 'test.csv', 'application/csv', null, true);
 
         $timeSeries = $this->fileContentDecoder->decode($uploadedFile);
 
@@ -64,6 +60,6 @@ final readonly class TrainingProcessor
         $score = $multiPerceptron->train();
         $test = $multiPerceptron->test();
 
-        dd($score, $test, $multiPerceptron->report());
+        # dd($score, $test, $multiPerceptron->jsonSerialize());
     }
 }
