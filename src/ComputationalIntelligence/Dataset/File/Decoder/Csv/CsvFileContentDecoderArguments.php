@@ -10,7 +10,7 @@ final readonly class CsvFileContentDecoderArguments implements ContentDecoderArg
 {
     public function __construct(
         public string $separator = ',',
-        public string $dateFormat = 'Y-m-d H:i:s',
+        public string $dateFormat = 'Y-m-d',
         public string $valueFormat = '%.2f',
         public bool $containsHeader = true,
     ) {

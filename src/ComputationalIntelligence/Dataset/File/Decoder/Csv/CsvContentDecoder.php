@@ -44,7 +44,6 @@ final readonly class CsvContentDecoder extends ContentDecoderStrategy
                 $headers = null;
 
                 foreach ($splFile as $i => /** @var string[] $row */ $row) {
-
                     if ($this->isHeaderRow($i)) {
                         $headers = $row;
 
@@ -55,15 +54,19 @@ final readonly class CsvContentDecoder extends ContentDecoderStrategy
                         continue;
                     }
 
-                    $key = $this->parseDateTime($row[0]);
+                    try {
+                        $key = $this->parseDateTime($row[16]);
 
-                    if (!$key) {
-                        continue;
+                        if (!$key) {
+                            continue;
+                        }
+
+                        $value = (float) sprintf($this->arguments->valueFormat, $row[7]);
+                        $currentValue = $this->getCurrentValue($result, $key);
+                        $result->offsetSet($key, round($currentValue + $value, RealNumber::PRECISION));
+                    } catch (\Throwable $e) {
+                        # todo
                     }
-
-                    $value = (float) sprintf($this->arguments->valueFormat, $row[1]);
-                    $currentValue = $this->getCurrentValue($result, $key);
-                    $result->offsetSet($key, round($currentValue + $value, RealNumber::PRECISION));
                 }
 
                 return $result;
