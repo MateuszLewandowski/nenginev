@@ -60,6 +60,6 @@ final readonly class TrainingProcessor
         $score = $multiPerceptron->train();
         $test = $multiPerceptron->test();
 
-        # dd($score, $test, $multiPerceptron->jsonSerialize());
+        # todo handle results
     }
 }

@@ -23,8 +23,7 @@ final class TrainRegressionModelController extends AbstractController
     #[Route(path: '/regression/model/train', methods: Request::METHOD_POST)]
     public function __invoke(Request $request): Response
     {
+        # todo
         $result = ($this->trainingProcessor)($request);
-
-        dd($result);
     }
 }
